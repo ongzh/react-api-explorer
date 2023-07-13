@@ -17,14 +17,14 @@ const ExploreButton: React.FC<{
 
 const Sidebar: React.FC<{ apiProviders: string[] }> = ({ apiProviders }) => {
   return (
-    <div className="sidebar">
+    <>
       <h1 className="sidebar-title">Select Provider</h1>
       <div className="sidebar-list-container">
         {apiProviders.map((provider) => (
           <ApiProvider key={provider} provider={provider} />
         ))}
       </div>
-    </div>
+    </>
   );
 };
 
@@ -137,11 +137,24 @@ const Home: React.FC = () => {
     fetchApiProviders();
   }, []);
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsAnimating(false);
+    }, 3000);
+    return () => {
+      clearTimeout(timeout);
+      console.log(isAnimating);
+    };
+  }, [isAnimating]);
+
   const toggleExploreButton = () => {
+    setIsAnimating(true);
+    console.log(isAnimating);
     setIsSidebarOpen(true);
   };
 
   const toggleOverlay = () => {
+    setIsAnimating(false);
     setIsSidebarOpen(false);
   };
 
@@ -150,9 +163,16 @@ const Home: React.FC = () => {
       <div className="home-container">
         <ExploreButton toggleExploreButton={toggleExploreButton} />
         {isSidebarOpen && (
-          <div className="overlay-shadow" onClick={toggleOverlay} />
+          <div
+            className={`overlay-shadow ${isAnimating ? "" : "fixed"}`}
+            onClick={toggleOverlay}
+          />
         )}
-        {isSidebarOpen && <Sidebar apiProviders={apiProviders} />}
+        {isSidebarOpen && (
+          <div className={`sidebar ${isAnimating ? "" : "fixed"}`}>
+            <Sidebar apiProviders={apiProviders} />
+          </div>
+        )}
       </div>
     </>
   );

@@ -17,6 +17,7 @@
   animation: slideRightToLeft 0.3s linear forwards;
   right: -100%;
 }
+
 .sidebar {
   position: absolute;
   width: 40%;
@@ -29,6 +30,11 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+
+.fixed {
+  right: 0%;
+  animation: none;
 }
 
 .sidebar-title {
@@ -91,6 +97,15 @@
 @keyframes slideRightToLeft {
   0% {
     right: -100%; /* Starting position */
+  }
+  100% {
+    right: 0%; /* Ending position */
+  }
+}
+
+@keyframes animateFixed {
+  0% {
+    right: 0%; /* Starting position */
   }
   100% {
     right: 0%; /* Ending position */
