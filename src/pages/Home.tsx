@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import "./Home.css";
 import axios from "axios";
 import { FaAngleUp, FaAngleDown } from "react-icons/fa";
-import { ApiDetails } from "../utils/ApiResponseType";
+import { ApiDisplay } from "../utils/schema";
+import { Link } from "react-router-dom";
+
 const ExploreButton: React.FC<{
   toggleExploreButton: () => void;
 }> = ({ toggleExploreButton }) => {
@@ -32,7 +34,7 @@ const Sidebar: React.FC<{ apiProviders: string[] }> = ({ apiProviders }) => {
 };
 
 const ApiProvider: React.FC<{ provider: string }> = ({ provider }) => {
-  const [availableApis, setAvailableApis] = useState<ApiDetails[]>([]);
+  const [availableApis, setAvailableApis] = useState<ApiDisplay[]>([]);
   const [isToggleOpen, setIsToggleOpen] = useState<boolean>(false);
 
   const toggleDropdown = () => {
@@ -46,14 +48,13 @@ const ApiProvider: React.FC<{ provider: string }> = ({ provider }) => {
 
               for (const key in response.data.apis) {
                 const api = response.data.apis[key];
-                const apiDetails: ApiDetails = {
+                const apiDisplay: ApiDisplay = {
                   title: api.info.title,
-                  description: api.info.description,
                   image: api.info["x-logo"].url, // api.x-logo.url
-                  swaggerUrl: api.swaggerUrl,
-                  contact: api.info.contact,
+                  provider: provider,
+                  service: api.info["x-serviceName"],
                 };
-                setAvailableApis((prev) => [...prev, apiDetails]);
+                setAvailableApis((prev) => [...prev, apiDisplay]);
               }
             });
         } catch (error) {
@@ -86,23 +87,23 @@ const ApiProvider: React.FC<{ provider: string }> = ({ provider }) => {
   );
 };
 
-const ApiList: React.FC<{ availableApis: ApiDetails[] }> = ({
+const ApiList: React.FC<{ availableApis: ApiDisplay[] }> = ({
   availableApis,
 }) => {
-  const handleApiClick = () => {
-    console.log("navigate to details page");
-  };
   return (
     <div className="api-list">
-      {availableApis.map((api) => (
-        <div className="api-provided" onClick={handleApiClick}>
+      {availableApis.map((apiDisplay) => (
+        <Link
+          className="api-provided"
+          to={`/apiDetails/${apiDisplay.provider}/${apiDisplay.service}`}
+        >
           <img
-            src={api.image}
+            src={apiDisplay.image}
             alt=""
             style={{ height: "2.5rem", marginRight: "0.5rem" }}
           />
-          {api.title}
-        </div>
+          {apiDisplay.title}
+        </Link>
       ))}
     </div>
   );

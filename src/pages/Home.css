@@ -68,6 +68,8 @@
   display: flex;
   align-items: center;
   padding-bottom: 0.5rem;
+  color: rgba(251, 253, 254, 255);
+  text-decoration: none;
 }
 
 .dropdown-toggle {
