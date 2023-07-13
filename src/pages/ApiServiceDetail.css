@@ -1,5 +1,6 @@
 body {
   font-size: 1.2rem;
+  height: 100%;
 }
 
 .api-service-header {
@@ -29,4 +30,11 @@ body {
   width: 4rem;
   font-weight: normal;
   font-size: 1.2rem;
+}
+
+.explore-btn-container {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 3rem;
+  margin-top: auto;
 }

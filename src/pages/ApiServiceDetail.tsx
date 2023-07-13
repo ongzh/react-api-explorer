@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ApiDetail } from "../utils/schema";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./ApiServiceDetail.css";
 
@@ -56,8 +56,13 @@ const ApiServiceDetail: React.FC = () => {
 const ApiDetailDisplay: React.FC<{ apiDetail: ApiDetail }> = ({
   apiDetail,
 }) => {
+  const navigate = useNavigate();
+
+  const handleExploreMoreClick = () => {
+    navigate("/", { state: { isSidebarOpen: true } });
+  };
   return (
-    <div>
+    <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
       <h1 className="api-service-header">
         <img
           src={apiDetail.image}
@@ -92,6 +97,14 @@ const ApiDetailDisplay: React.FC<{ apiDetail: ApiDetail }> = ({
             <span>{apiDetail.contact.url}</span>
           </div>
         </div>
+      </div>
+      <div className="explore-btn-container">
+        <button
+          className="explore-btn"
+          onClick={() => handleExploreMoreClick()}
+        >
+          Explore More APIs
+        </button>
       </div>
     </div>
   );

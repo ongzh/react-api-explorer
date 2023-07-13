@@ -3,7 +3,7 @@ import "./Home.css";
 import axios from "axios";
 import { FaAngleUp, FaAngleDown } from "react-icons/fa";
 import { ApiDisplay } from "../utils/schema";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const ExploreButton: React.FC<{
   toggleExploreButton: () => void;
@@ -113,6 +113,13 @@ const ApiList: React.FC<{ availableApis: ApiDisplay[] }> = ({
 const Home: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [apiProviders, setApiProviders] = useState<string[]>([]);
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state !== undefined) {
+      setIsSidebarOpen(location.state.isSidebarOpen);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     const fetchApiProviders = async () => {
