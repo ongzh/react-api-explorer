@@ -19,19 +19,21 @@ const ApiServiceDetail: React.FC = () => {
           .get(`https://api.apis.guru/v2/${provider}.json`)
           .then((response) => {
             console.log(provider, apiService);
-            if (apiService !== undefined) {
-              const api = response.data.apis[`${provider}:${apiService}`];
-              console.log(response);
-              console.log(api);
-              const apiDetail: ApiDetail = {
-                title: api.info.title,
-                image: api.info["x-logo"].url, // api.x-logo.url
-                description: api.info.description,
-                swaggerUrl: api.swaggerUrl,
-                contact: api.info.contact,
-              };
-              setApiDetail(apiDetail);
-            }
+            const api =
+              apiService === undefined
+                ? response.data.apis[`${provider}`]
+                : response.data.apis[`${provider}:${apiService}`];
+            console.log(response);
+            console.log(api);
+            const apiDetail: ApiDetail = {
+              title: api.info.title,
+              image: api.info["x-logo"].url, // api.x-logo.url
+              description: api.info.description,
+              swaggerUrl: api.swaggerUrl,
+              contact: api.info.contact,
+            };
+
+            setApiDetail(apiDetail);
           });
       } catch (error) {
         console.error(error);
@@ -81,23 +83,43 @@ const ApiDetailDisplay: React.FC<{ apiDetail: ApiDetail }> = ({
           <h2 className="service-detail-header">Swagger</h2>
           <span>{apiDetail.swaggerUrl}</span>
         </div>
-        <div className="service-detail-section">
-          <h2 className="service-detail-header">Contact</h2>
+        {/*not all api have contact field */}
+        {apiDetail.contact === undefined ? (
+          <div></div>
+        ) : (
+          <div className="service-detail-section">
+            <h2 className="service-detail-header">Contact</h2>
 
-          <div>
-            <h3 className="contact-info-header">Email</h3>
-            <span>{apiDetail.contact.email}</span>
+            {apiDetail.contact.email === undefined ? (
+              <div></div>
+            ) : (
+              <div>
+                <h3 className="contact-info-header">Email</h3>
+                <span>{apiDetail.contact.email}</span>
+              </div>
+            )}
+
+            {apiDetail.contact.name === undefined ? (
+              <div></div>
+            ) : (
+              <div>
+                <h3 className="contact-info-header">Name</h3>
+                <span>{apiDetail.contact.name}</span>
+              </div>
+            )}
+
+            {apiDetail.contact.url === undefined ? (
+              <div></div>
+            ) : (
+              <div>
+                <h3 className="contact-info-header">URL</h3>
+                <span>{apiDetail.contact.url}</span>
+              </div>
+            )}
           </div>
-          <div>
-            <h3 className="contact-info-header">Name</h3>
-            <span>{apiDetail.contact.name}</span>
-          </div>
-          <div>
-            <h3 className="contact-info-header">Url</h3>
-            <span>{apiDetail.contact.url}</span>
-          </div>
-        </div>
+        )}
       </div>
+
       <div className="explore-btn-container">
         <button
           className="explore-btn"

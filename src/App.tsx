@@ -13,6 +13,7 @@ const App: React.FC = () => {
           path="/apiDetails/:provider/:apiService"
           element={<ApiServiceDetail />}
         />
+        <Route path="/apiDetails/:provider" element={<ApiServiceDetail />} />
       </Routes>
     </Router>
   );

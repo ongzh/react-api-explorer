@@ -95,7 +95,12 @@ const ApiList: React.FC<{ availableApis: ApiDisplay[] }> = ({
       {availableApis.map((apiDisplay) => (
         <Link
           className="api-provided"
-          to={`/apiDetails/${apiDisplay.provider}/${apiDisplay.service}`}
+          to={
+            apiDisplay.service !== undefined
+              ? `/apiDetails/${apiDisplay.provider}/${apiDisplay.service}`
+              : `/apiDetails/${apiDisplay.provider}`
+          }
+          key={apiDisplay.service}
         >
           <img
             src={apiDisplay.image}
@@ -116,7 +121,7 @@ const Home: React.FC = () => {
   const location = useLocation();
 
   useEffect(() => {
-    if (location.state !== undefined) {
+    if (location.state !== null) {
       setIsSidebarOpen(location.state.isSidebarOpen);
     }
   }, [location.state]);
