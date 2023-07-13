@@ -45,11 +45,17 @@
 .api-provider-container {
   display: flex;
   flex-direction: column;
+  margin-bottom: 0.1rem;
+}
+
+.toggled-color {
+  background-color: rgba(29, 38, 50, 255);
+  border-radius: 10px;
 }
 
 .api-provider-container > div {
   font-size: 1.8rem;
-  padding: 0.5rem 3rem 0.5rem 3rem;
+  padding: 0.5rem 0.6rem 0.5rem 0.5rem;
 }
 
 .api-provider {

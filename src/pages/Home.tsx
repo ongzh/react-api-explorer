@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Home.css";
 import axios from "axios";
 import { FaAngleUp, FaAngleDown } from "react-icons/fa";
-
+import { ApiDetails } from "../utils/ApiResponseType";
 const ExploreButton: React.FC<{
   toggleExploreButton: () => void;
 }> = ({ toggleExploreButton }) => {
@@ -17,7 +17,12 @@ const Sidebar: React.FC<{ apiProviders: string[] }> = ({ apiProviders }) => {
   return (
     <div className="sidebar">
       <h1 className="sidebar-title">Select Provider</h1>
-      <div>
+      <div
+        style={{
+          marginLeft: "4rem",
+          marginRight: "4rem",
+        }}
+      >
         {apiProviders.map((provider) => (
           <ApiProvider key={provider} provider={provider} />
         ))}
@@ -25,20 +30,6 @@ const Sidebar: React.FC<{ apiProviders: string[] }> = ({ apiProviders }) => {
     </div>
   );
 };
-
-interface ApiDetails {
-  title: string;
-  description: string;
-  image: string;
-  swaggerUrl: string;
-  contact: ApiContact;
-}
-
-interface ApiContact {
-  email?: string;
-  url?: string;
-  name?: string;
-}
 
 const ApiProvider: React.FC<{ provider: string }> = ({ provider }) => {
   const [availableApis, setAvailableApis] = useState<ApiDetails[]>([]);
@@ -75,14 +66,22 @@ const ApiProvider: React.FC<{ provider: string }> = ({ provider }) => {
   };
 
   return (
-    <div className="api-provider-container">
-      <div className="api-provider">
-        {provider}
-        <button className="dropdown-toggle" onClick={toggleDropdown}>
-          {isToggleOpen ? <FaAngleUp /> : <FaAngleDown />}
-        </button>
+    <div>
+      <div
+        className={
+          isToggleOpen
+            ? "api-provider-container toggled-color"
+            : "api-provider-container"
+        }
+      >
+        <div className="api-provider">
+          {provider}
+          <button className="dropdown-toggle" onClick={toggleDropdown}>
+            {isToggleOpen ? <FaAngleUp /> : <FaAngleDown />}
+          </button>
+        </div>
+        {isToggleOpen && <ApiList availableApis={availableApis} />}
       </div>
-      {isToggleOpen && <ApiList availableApis={availableApis} />}
     </div>
   );
 };
