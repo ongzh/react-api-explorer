@@ -101,6 +101,7 @@ const ApiList: React.FC<{ availableApis: ApiDisplay[] }> = ({
             src={apiDisplay.image}
             alt=""
             style={{ height: "2.5rem", marginRight: "0.5rem" }}
+            aria-label="api service image"
           />
           {apiDisplay.title}
         </Link>

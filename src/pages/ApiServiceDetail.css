@@ -1,0 +1,32 @@
+body {
+  font-size: 1.2rem;
+}
+
+.api-service-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: normal;
+  margin-top: 3.5rem;
+}
+
+.service-detail-container {
+  padding: 2rem 12rem 5rem 12rem;
+}
+
+.service-detail-section {
+  padding-bottom: 0.05rem;
+}
+.service-detail-header {
+  font-weight: normal;
+  margin-bottom: 0.5rem;
+}
+
+.contact-info-header {
+  display: inline-block;
+  margin-top: 0rem;
+  margin-bottom: 0.5rem;
+  width: 4rem;
+  font-weight: normal;
+  font-size: 1.2rem;
+}

@@ -14,3 +14,15 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.explore-btn {
+  background-color: rgba(68, 160, 212, 255);
+  color: rgba(251, 253, 254, 255);
+  box-shadow: none;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.5rem;
+  padding: 0.8rem 1.2rem 0.8rem 1.2rem;
+  z-index: 1;
+}
