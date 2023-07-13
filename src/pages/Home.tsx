@@ -19,12 +19,7 @@ const Sidebar: React.FC<{ apiProviders: string[] }> = ({ apiProviders }) => {
   return (
     <div className="sidebar">
       <h1 className="sidebar-title">Select Provider</h1>
-      <div
-        style={{
-          marginLeft: "4rem",
-          marginRight: "4rem",
-        }}
-      >
+      <div className="sidebar-list-container">
         {apiProviders.map((provider) => (
           <ApiProvider key={provider} provider={provider} />
         ))}
@@ -118,6 +113,8 @@ const ApiList: React.FC<{ availableApis: ApiDisplay[] }> = ({
 const Home: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [apiProviders, setApiProviders] = useState<string[]>([]);
+  const [isAnimating, setIsAnimating] = useState<boolean>(false);
+
   const location = useLocation();
 
   useEffect(() => {
@@ -141,7 +138,11 @@ const Home: React.FC = () => {
   }, []);
 
   const toggleExploreButton = () => {
-    setIsSidebarOpen(!isSidebarOpen);
+    setIsSidebarOpen(true);
+  };
+
+  const toggleOverlay = () => {
+    setIsSidebarOpen(false);
   };
 
   return (
@@ -149,7 +150,7 @@ const Home: React.FC = () => {
       <div className="home-container">
         <ExploreButton toggleExploreButton={toggleExploreButton} />
         {isSidebarOpen && (
-          <div className="overlay-shadow" onClick={toggleExploreButton} />
+          <div className="overlay-shadow" onClick={toggleOverlay} />
         )}
         {isSidebarOpen && <Sidebar apiProviders={apiProviders} />}
       </div>
