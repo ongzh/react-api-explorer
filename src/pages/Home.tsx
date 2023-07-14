@@ -1,9 +1,88 @@
 import React, { useEffect, useState } from "react";
 import "./Home.css";
 import axios from "axios";
-import { FaAngleUp, FaAngleDown } from "react-icons/fa";
+import { FaAngleDown } from "react-icons/fa";
 import { ApiDisplay } from "../utils/schema";
 import { Link, useLocation } from "react-router-dom";
+
+const Home: React.FC = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+  const [apiProviders, setApiProviders] = useState<string[]>([]);
+  const [isAnimating, setIsAnimating] = useState<boolean>(false);
+  const [buttonWidth, setButtonWidth] = useState<number>(0);
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state !== null) {
+      setIsSidebarOpen(location.state.isSidebarOpen);
+    }
+  }, [location.state]);
+
+  useEffect(() => {
+    const fetchApiProviders = async () => {
+      try {
+        const response = await axios.get(
+          "https://api.apis.guru/v2/providers.json"
+        );
+        setApiProviders(response.data.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchApiProviders();
+  }, []);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsAnimating(false);
+    }, 3000);
+    return () => {
+      clearTimeout(timeout);
+      console.log(isAnimating);
+    };
+  }, [isAnimating]);
+
+  const handleButtonRef = (ref: HTMLButtonElement | null) => {
+    if (ref) {
+      setButtonWidth(ref.offsetWidth);
+    }
+  };
+
+  const toggleExploreButton = () => {
+    setIsAnimating(true);
+    setIsSidebarOpen(true);
+  };
+
+  const toggleOverlay = () => {
+    setIsAnimating(false);
+    setIsSidebarOpen(false);
+  };
+
+  return (
+    <>
+      <div className="home-container">
+        <ExploreButton
+          toggleExploreButton={toggleExploreButton}
+          handleButtonRef={handleButtonRef}
+        />
+        {isSidebarOpen && (
+          <div
+            className={`overlay-shadow ${isAnimating ? "" : "fixed"}`}
+            onClick={toggleOverlay}
+          />
+        )}
+        {isSidebarOpen && (
+          <div
+            className={`sidebar ${isAnimating ? "" : "fixed"}`}
+            style={{ width: `calc(50vw - ${buttonWidth / 2}px)` }}
+          >
+            <Sidebar apiProviders={apiProviders} />
+          </div>
+        )}
+      </div>
+    </>
+  );
+};
 
 const ExploreButton: React.FC<{
   toggleExploreButton: () => void;
@@ -71,23 +150,27 @@ const ApiProvider: React.FC<{ provider: string }> = ({ provider }) => {
       <div
         className={
           isToggleOpen
-            ? "api-provider-container toggled-color"
+            ? "api-provider-container toggle-color"
             : "api-provider-container"
         }
       >
         <button className="api-provider" onClick={toggleDropdown}>
           <span style={{ overflow: "hidden" }}>{provider}</span>
-          <span className="dropdown-toggle-logo">
-            {isToggleOpen ? <FaAngleUp /> : <FaAngleDown />}
+          <span
+            className={`dropdown-toggle-logo ${
+              isToggleOpen ? "toggle-open" : ""
+            }`}
+          >
+            {<FaAngleDown />}
           </span>
         </button>
-        {isToggleOpen && <ApiList availableApis={availableApis} />}
+        {isToggleOpen && <ApiServiceList availableApis={availableApis} />}
       </div>
     </div>
   );
 };
-
-const ApiList: React.FC<{ availableApis: ApiDisplay[] }> = ({
+//list of api service within each provider
+const ApiServiceList: React.FC<{ availableApis: ApiDisplay[] }> = ({
   availableApis,
 }) => {
   return (
@@ -112,87 +195,6 @@ const ApiList: React.FC<{ availableApis: ApiDisplay[] }> = ({
         </Link>
       ))}
     </div>
-  );
-};
-
-const Home: React.FC = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
-  const [apiProviders, setApiProviders] = useState<string[]>([]);
-  const [isAnimating, setIsAnimating] = useState<boolean>(false);
-  const [buttonWidth, setButtonWidth] = useState<number>(0);
-  const location = useLocation();
-
-  useEffect(() => {
-    if (location.state !== null) {
-      setIsSidebarOpen(location.state.isSidebarOpen);
-    }
-  }, [location.state]);
-
-  useEffect(() => {
-    const fetchApiProviders = async () => {
-      try {
-        const response = await axios.get(
-          "https://api.apis.guru/v2/providers.json"
-        );
-        setApiProviders(response.data.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchApiProviders();
-  }, []);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setIsAnimating(false);
-    }, 3000);
-    return () => {
-      clearTimeout(timeout);
-      console.log(isAnimating);
-    };
-  }, [isAnimating]);
-
-  useEffect(() => {}, [buttonWidth]);
-
-  const handleButtonRef = (ref: HTMLButtonElement | null) => {
-    if (ref) {
-      setButtonWidth(ref.offsetWidth);
-    }
-  };
-
-  const toggleExploreButton = () => {
-    setIsAnimating(true);
-    setIsSidebarOpen(true);
-  };
-
-  const toggleOverlay = () => {
-    setIsAnimating(false);
-    setIsSidebarOpen(false);
-  };
-
-  return (
-    <>
-      <div className="home-container">
-        <ExploreButton
-          toggleExploreButton={toggleExploreButton}
-          handleButtonRef={handleButtonRef}
-        />
-        {isSidebarOpen && (
-          <div
-            className={`overlay-shadow ${isAnimating ? "" : "fixed"}`}
-            onClick={toggleOverlay}
-          />
-        )}
-        {isSidebarOpen && (
-          <div
-            className={`sidebar ${isAnimating ? "" : "fixed"}`}
-            style={{ width: `calc(50vw - ${buttonWidth / 2}px)` }}
-          >
-            <Sidebar apiProviders={apiProviders} />
-          </div>
-        )}
-      </div>
-    </>
   );
 };
 
