@@ -7,9 +7,14 @@ import { Link, useLocation } from "react-router-dom";
 
 const ExploreButton: React.FC<{
   toggleExploreButton: () => void;
-}> = ({ toggleExploreButton }) => {
+  handleButtonRef: (ref: HTMLButtonElement) => void;
+}> = ({ toggleExploreButton, handleButtonRef }) => {
   return (
-    <button className="explore-btn" onClick={toggleExploreButton}>
+    <button
+      className="explore-btn"
+      ref={handleButtonRef}
+      onClick={toggleExploreButton}
+    >
       Explore web APIs
     </button>
   );
@@ -71,7 +76,7 @@ const ApiProvider: React.FC<{ provider: string }> = ({ provider }) => {
         }
       >
         <button className="api-provider" onClick={toggleDropdown}>
-          {provider}
+          <span style={{ overflow: "hidden" }}>{provider}</span>
           <span className="dropdown-toggle-logo">
             {isToggleOpen ? <FaAngleUp /> : <FaAngleDown />}
           </span>
@@ -114,7 +119,7 @@ const Home: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [apiProviders, setApiProviders] = useState<string[]>([]);
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
-
+  const [buttonWidth, setButtonWidth] = useState<number>(0);
   const location = useLocation();
 
   useEffect(() => {
@@ -147,6 +152,14 @@ const Home: React.FC = () => {
     };
   }, [isAnimating]);
 
+  useEffect(() => {}, [buttonWidth]);
+
+  const handleButtonRef = (ref: HTMLButtonElement | null) => {
+    if (ref) {
+      setButtonWidth(ref.offsetWidth);
+    }
+  };
+
   const toggleExploreButton = () => {
     setIsAnimating(true);
     setIsSidebarOpen(true);
@@ -160,7 +173,10 @@ const Home: React.FC = () => {
   return (
     <>
       <div className="home-container">
-        <ExploreButton toggleExploreButton={toggleExploreButton} />
+        <ExploreButton
+          toggleExploreButton={toggleExploreButton}
+          handleButtonRef={handleButtonRef}
+        />
         {isSidebarOpen && (
           <div
             className={`overlay-shadow ${isAnimating ? "" : "fixed"}`}
@@ -168,7 +184,10 @@ const Home: React.FC = () => {
           />
         )}
         {isSidebarOpen && (
-          <div className={`sidebar ${isAnimating ? "" : "fixed"}`}>
+          <div
+            className={`sidebar ${isAnimating ? "" : "fixed"}`}
+            style={{ width: `calc(50vw - ${buttonWidth / 2}px)` }}
+          >
             <Sidebar apiProviders={apiProviders} />
           </div>
         )}
