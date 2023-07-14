@@ -60,7 +60,7 @@
 .api-provider-container {
   display: flex;
   flex-direction: column;
-  margin-bottom: 0.1rem;
+  margin-bottom: 0.5rem;
 }
 
 .toggled-color {
@@ -76,6 +76,14 @@
 .api-provider {
   display: flex;
   justify-content: space-between;
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0.5rem;
+  font: inherit;
+  font-size: 2rem;
+  cursor: pointer;
+  outline: inherit;
 }
 
 .api-provided {
@@ -87,7 +95,7 @@
   text-decoration: none;
 }
 
-.dropdown-toggle {
+.dropdown-toggle-logo {
   background: none;
   color: rgba(251, 253, 254, 255);
   border: none;

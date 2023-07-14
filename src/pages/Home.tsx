@@ -70,12 +70,12 @@ const ApiProvider: React.FC<{ provider: string }> = ({ provider }) => {
             : "api-provider-container"
         }
       >
-        <div className="api-provider">
+        <button className="api-provider" onClick={toggleDropdown}>
           {provider}
-          <button className="dropdown-toggle" onClick={toggleDropdown}>
+          <span className="dropdown-toggle-logo">
             {isToggleOpen ? <FaAngleUp /> : <FaAngleDown />}
-          </button>
-        </div>
+          </span>
+        </button>
         {isToggleOpen && <ApiList availableApis={availableApis} />}
       </div>
     </div>
@@ -149,7 +149,6 @@ const Home: React.FC = () => {
 
   const toggleExploreButton = () => {
     setIsAnimating(true);
-    console.log(isAnimating);
     setIsSidebarOpen(true);
   };
 
