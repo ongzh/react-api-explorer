@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./Home.css";
+import "../styles/Home.css";
 import axios from "axios";
 import { FaAngleDown } from "react-icons/fa";
 import { ApiDisplay } from "../utils/schema";
@@ -14,6 +14,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     if (location.state !== null) {
+      console.log(location.state);
       setIsSidebarOpen(location.state.isSidebarOpen);
     }
   }, [location.state]);
@@ -27,6 +28,7 @@ const Home: React.FC = () => {
         setApiProviders(response.data.data);
       } catch (error) {
         console.error(error);
+        alert("Error fetching API providers");
       }
     };
     fetchApiProviders();
@@ -38,7 +40,7 @@ const Home: React.FC = () => {
     }, 3000);
     return () => {
       clearTimeout(timeout);
-      console.log(isAnimating);
+      //console.log(isAnimating);
     };
   }, [isAnimating]);
 
@@ -138,6 +140,7 @@ const ApiProvider: React.FC<{ provider: string }> = ({ provider }) => {
             });
         } catch (error) {
           console.error(error);
+          alert("Error fetching available APIs");
         }
       };
       fetchAvailableApis();

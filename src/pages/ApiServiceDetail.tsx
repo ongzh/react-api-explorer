@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ApiDetail } from "../utils/schema";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./ApiServiceDetail.css";
+import "../styles/ApiServiceDetail.css";
 
 const ApiServiceDetail: React.FC = () => {
   const [apiDetail, setApiDetail] = useState<ApiDetail>();
@@ -13,7 +13,7 @@ const ApiServiceDetail: React.FC = () => {
   }>();
 
   useEffect(() => {
-    const fetchApiDetail = async () => {
+    const fetchApiDetail = () => {
       try {
         axios
           .get(`https://api.apis.guru/v2/${provider}.json`)
@@ -37,6 +37,7 @@ const ApiServiceDetail: React.FC = () => {
           });
       } catch (error) {
         console.error(error);
+        alert("Error fetching API details");
       }
     };
     fetchApiDetail();
@@ -75,46 +76,39 @@ const ApiDetailDisplay: React.FC<{ apiDetail: ApiDetail }> = ({
         {apiDetail.title}
       </h1>
       <div className="service-detail-container">
-        <div className="service-detail-section">
-          <h2 className="service-detail-header">Description</h2>
-          <span>{apiDetail.description}</span>
-        </div>
-        <div className="service-detail-section">
-          <h2 className="service-detail-header">Swagger</h2>
-          <span>{apiDetail.swaggerUrl}</span>
-        </div>
+        <ServiceDetailDisplay
+          serviceDetailInfo={apiDetail.description}
+          serviceDetailType="Description"
+        />
+        <ServiceDetailDisplay
+          serviceDetailInfo={apiDetail.swaggerUrl}
+          serviceDetailType="Swagger"
+        />
+
         {/*not all api have contact field */}
-        {apiDetail.contact === undefined ? (
-          <div></div>
-        ) : (
+        {apiDetail.contact !== undefined && (
           <div className="service-detail-section">
             <h2 className="service-detail-header">Contact</h2>
 
-            {apiDetail.contact.email === undefined ? (
-              <div></div>
-            ) : (
-              <div>
-                <h3 className="contact-info-header">Email</h3>
-                <span>{apiDetail.contact.email}</span>
-              </div>
+            {apiDetail.contact.email !== undefined && (
+              <ContactDetailDisplay
+                contactFieldInfo={apiDetail.contact.email}
+                contactFieldType="Email"
+              />
             )}
 
-            {apiDetail.contact.name === undefined ? (
-              <div></div>
-            ) : (
-              <div>
-                <h3 className="contact-info-header">Name</h3>
-                <span>{apiDetail.contact.name}</span>
-              </div>
+            {apiDetail.contact.name !== undefined && (
+              <ContactDetailDisplay
+                contactFieldInfo={apiDetail.contact.name}
+                contactFieldType="Name"
+              />
             )}
 
-            {apiDetail.contact.url === undefined ? (
-              <div></div>
-            ) : (
-              <div>
-                <h3 className="contact-info-header">URL</h3>
-                <span>{apiDetail.contact.url}</span>
-              </div>
+            {apiDetail.contact.url !== undefined && (
+              <ContactDetailDisplay
+                contactFieldInfo={apiDetail.contact.url}
+                contactFieldType="Url"
+              />
             )}
           </div>
         )}
@@ -131,4 +125,29 @@ const ApiDetailDisplay: React.FC<{ apiDetail: ApiDetail }> = ({
     </div>
   );
 };
+
+const ServiceDetailDisplay: React.FC<{
+  serviceDetailInfo: string;
+  serviceDetailType: string;
+}> = ({ serviceDetailInfo, serviceDetailType }) => {
+  return (
+    <div className="service-detail-section">
+      <h2 className="service-detail-header">{serviceDetailType}</h2>
+      <span>{serviceDetailInfo}</span>
+    </div>
+  );
+};
+
+const ContactDetailDisplay: React.FC<{
+  contactFieldInfo: string;
+  contactFieldType: string;
+}> = ({ contactFieldInfo, contactFieldType }) => {
+  return (
+    <div>
+      <h3 className="contact-info-header">{contactFieldType}</h3>
+      <span>{contactFieldInfo}</span>
+    </div>
+  );
+};
+
 export default ApiServiceDetail;
