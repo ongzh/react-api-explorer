@@ -111,3 +111,17 @@
     right: 0%; /* Ending position */
   }
 }
+
+@media (max-width: 1023px) {
+}
+
+/*sidebar is wider on mobile*/
+@media (max-width: 767px) {
+  .sidebar {
+    width: 70% !important;
+  }
+  .sidebar-list-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}

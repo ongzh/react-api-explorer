@@ -26,3 +26,21 @@ code {
   padding: 0.8rem 1.2rem 0.8rem 1.2rem;
   z-index: 1;
 }
+
+@media (max-width: 1439px) {
+  html {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 1023px) {
+  html {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 767px) {
+  html {
+    font-size: 7px;
+  }
+}
